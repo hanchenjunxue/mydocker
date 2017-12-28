@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 	"syscall"
+	//_ "golang.org/x/sys/unix"
 )
 
 func RunContainerInitProcess() error {
@@ -53,13 +54,27 @@ func setUpMount() {
 		return
 	}
 	log.Infof("Current location is %s", pwd)
-	pivotRoot(pwd)
+	changeroot(pwd)
 
 	//mount proc
 	defaultMountFlags := syscall.MS_NOEXEC | syscall.MS_NOSUID | syscall.MS_NODEV
 	syscall.Mount("proc", "/proc", "proc", uintptr(defaultMountFlags), "")
 
 	syscall.Mount("tmpfs", "/dev", "tmpfs", syscall.MS_NOSUID|syscall.MS_STRICTATIME, "mode=755")
+}
+
+func changeroot(path string) error {
+	// 挂载点现在依然可以在mount命令中看到
+	if err := syscall.Chroot(path); err != nil {
+		return fmt.Errorf("change root error----- %v", err)
+	}
+	// 修改当前的工作目录到根目录
+	if err := syscall.Chdir("/"); err != nil {
+		return fmt.Errorf("chdir to  / error----- %v", err)
+	}
+
+	return nil
+
 }
 
 func pivotRoot(root string) error {

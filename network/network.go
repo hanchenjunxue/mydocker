@@ -6,7 +6,7 @@ import (
 	"net"
 	"fmt"
 	//"os"
-	"github.com/xianlubird/mydocker/container"
+	"mydocker/container"
 	"path"
 	"os"
 	"runtime"

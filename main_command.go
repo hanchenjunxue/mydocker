@@ -4,10 +4,11 @@ import (
 	"fmt"
 	log "github.com/Sirupsen/logrus"
 	"github.com/urfave/cli"
-	"github.com/xianlubird/mydocker/cgroups/subsystems"
-	"github.com/xianlubird/mydocker/container"
-	"github.com/xianlubird/mydocker/network"
+
 	"os"
+	"mydocker/cgroups/subsystems"
+	"mydocker/container"
+	"mydocker/network"
 )
 
 var runCommand = cli.Command{
@@ -130,7 +131,7 @@ var execCommand = cli.Command{
 	Action: func(context *cli.Context) error {
 		//This is for callback
 		if os.Getenv(ENV_EXEC_PID) != "" {
-			log.Infof("pid callback pid %s", os.Getgid())
+			log.Infof("pid callback pid %s", os.Getpid())
 			return nil
 		}
 
